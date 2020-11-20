@@ -7,14 +7,15 @@
         external API using an access token, and the API will validate it using
         the API's audience value.
       </p>
-
-      <button class="btn btn-primary mt-5" @click="callApi2">Call API</button>
+      <p>Count is:{{ responseApi }}</p>
+      <button class="btn btn-primary mt-5" @click="getData">Call API</button>
     </div>
 
     <div class="result-block-container">
       <div :class="['result-block', executed ? 'show' : '']">
         <h6 class="muted">Result</h6>
-        <pre v-highlightjs="JSON.stringify(apiMessage, null, 2)">
+
+        <pre v-highlightjs="responseApi">
           <code class="js rounded"></code>
         </pre>
       </div>
@@ -24,34 +25,48 @@
 
 <script>
 export default {
-  name: "Api",
+  name: 'Api',
   data() {
     return {
       apiMessage: null,
       executed: false,
-    };
+    }
+  },
+  computed: {
+    responseApi() {
+      //return this.$store.state.fixedstations.count
+      return this.$store.state.fixedstations.dataApi
+    },
   },
   methods: {
+    async getData() {
+      // await this.$store.dispatch('fixedstations/increment')
+      await this.$store.dispatch('fixedstations/getDataApi', {
+        http: this.$http,
+        url: 'https://gorest.co.in/public-api/posts',
+      })
+    },
+
     async callApi2() {
-      this.executed = true;
+      this.executed = true
       try {
         const { data } = await this.$http.get(
-          "https://gorest.co.in/public-api/posts5"
-        );
+          'https://gorest.co.in/public-api/posts5'
+        )
 
-        this.apiMessage = data;
+        this.apiMessage = data
       } catch (error) {
-        console.log(error);
-        this.apiMessage = error.stack;
+        console.log(error)
+        this.apiMessage = error.stack
       }
     },
 
     callApi() {
-      this.executed = true;
+      this.executed = true
 
-      const accessToken = "gjkgkjgk"; //await this.$auth.getTokenSilently();
+      const accessToken = 'gjkgkjgk' //await this.$auth.getTokenSilently();
       this.$http
-        .get("/api/external", {
+        .get('/api/external', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -61,8 +76,8 @@ export default {
           (error) =>
             //console.log(err);
             (this.apiMessage = `Error: the server responded with '${error.response.status}: ${error.response.statusText}'`)
-        );
+        )
     },
   },
-};
+}
 </script>
