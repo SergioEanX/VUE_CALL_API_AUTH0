@@ -15,7 +15,10 @@
     </div>
 
     <div class="row">
-      <pre v-highlightjs="JSON.stringify($auth.user, null, 2)" class="rounded w-100">
+      <pre
+        v-highlightjs="JSON.stringify($auth.user, null, 2)"
+        class="rounded w-100"
+      >
         <code class="json"></code>
       </pre>
     </div>
