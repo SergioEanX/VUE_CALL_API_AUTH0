@@ -29,21 +29,21 @@ export default {
   data() {
     return {
       apiMessage: null,
-      executed: false,
+      executed: false
     }
   },
   computed: {
     responseApi() {
       //return this.$store.state.fixedstations.count
       return this.$store.state.fixedstations.dataApi
-    },
+    }
   },
   methods: {
     async getData() {
       // await this.$store.dispatch('fixedstations/increment')
       await this.$store.dispatch('fixedstations/getDataApi', {
         http: this.$http,
-        url: 'https://gorest.co.in/public-api/posts',
+        url: 'https://airheritage.portici.enea.it/rest/api/v1/fixed/status/'
       })
     },
 
@@ -68,16 +68,16 @@ export default {
       this.$http
         .get('/api/external', {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+            Authorization: `Bearer ${accessToken}`
+          }
         })
-        .then((data) => (this.apiMessage = data))
+        .then(data => (this.apiMessage = data))
         .catch(
-          (error) =>
+          error =>
             //console.log(err);
             (this.apiMessage = `Error: the server responded with '${error.response.status}: ${error.response.statusText}'`)
         )
-    },
-  },
+    }
+  }
 }
 </script>
