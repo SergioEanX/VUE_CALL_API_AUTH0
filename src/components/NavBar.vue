@@ -15,12 +15,12 @@
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarNav">
+        <div id="navbarNav" class="collapse navbar-collapse">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
-            <li class="nav-item" v-if="$auth.isAuthenticated">
+            <li v-if="$auth.isAuthenticated" class="nav-item">
               <router-link to="/external-api" class="nav-link"
                 >External API</router-link
               >
@@ -40,11 +40,11 @@
               </button>
             </li>
 
-            <li class="nav-item dropdown" v-if="$auth.isAuthenticated">
+            <li v-if="$auth.isAuthenticated" class="nav-item dropdown">
               <a
+                id="profileDropDown"
                 class="nav-link dropdown-toggle"
                 href="#"
-                id="profileDropDown"
                 data-toggle="dropdown"
               >
                 <img
@@ -75,8 +75,8 @@
           </ul>
 
           <ul
-            class="navbar-nav d-md-none"
             v-if="!$auth.isAuthenticated && !$auth.loading"
+            class="navbar-nav d-md-none"
           >
             <button
               id="qsLoginBtn"
@@ -88,9 +88,9 @@
           </ul>
 
           <ul
+            v-if="$auth.isAuthenticated"
             id="mobileAuthNavBar"
             class="navbar-nav d-md-none d-flex"
-            v-if="$auth.isAuthenticated"
           >
             <li class="nav-item">
               <span class="user-info">
@@ -124,6 +124,12 @@
 <script>
 export default {
   name: 'NavBar',
+  computed: {
+    userName() {
+      const userName = this.$auth.user.name
+      return userName
+    }
+  },
   methods: {
     login() {
       this.$auth.loginWithRedirect()
@@ -131,12 +137,6 @@ export default {
     logout() {
       this.$auth.logout({ returnTo: 'http://localhost:3000' })
       //this.$router.push({ path: '/' })
-    }
-  },
-  computed: {
-    userName() {
-      const userName = this.$auth.user.name
-      return userName
     }
   }
 }

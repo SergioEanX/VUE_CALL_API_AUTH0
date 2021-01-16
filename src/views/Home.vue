@@ -11,7 +11,7 @@ import Hero from '../components/Hero'
 import HomeContent from '../components/HomeContent'
 
 export default {
-  name: 'home',
+  name: 'Home',
   components: {
     Hero,
     HomeContent

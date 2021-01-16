@@ -26,6 +26,30 @@ export const useAuth0 = ({
         error: null
       }
     },
+    async created() {
+      this.auth0Client = await createAuth0Client({
+        ...options,
+        client_id: options.clientId,
+        redirect_uri: redirectUri
+      })
+
+      try {
+        if (
+          window.location.search.includes('code=') &&
+          window.location.search.includes('state=')
+        ) {
+          const { appState } = await this.auth0Client.handleRedirectCallback()
+          this.error = null
+          onRedirectCallback(appState)
+        }
+      } catch (e) {
+        this.error = e
+      } finally {
+        this.isAuthenticated = await this.auth0Client.isAuthenticated()
+        this.user = await this.auth0Client.getUser()
+        this.loading = false
+      }
+    },
     methods: {
       async loginWithPopup(options, config) {
         this.popupOpen = true
@@ -69,30 +93,6 @@ export const useAuth0 = ({
       },
       logout(o) {
         return this.auth0Client.logout(o)
-      }
-    },
-    async created() {
-      this.auth0Client = await createAuth0Client({
-        ...options,
-        client_id: options.clientId,
-        redirect_uri: redirectUri
-      })
-
-      try {
-        if (
-          window.location.search.includes('code=') &&
-          window.location.search.includes('state=')
-        ) {
-          const { appState } = await this.auth0Client.handleRedirectCallback()
-          this.error = null
-          onRedirectCallback(appState)
-        }
-      } catch (e) {
-        this.error = e
-      } finally {
-        this.isAuthenticated = await this.auth0Client.isAuthenticated()
-        this.user = await this.auth0Client.getUser()
-        this.loading = false
       }
     }
   })
